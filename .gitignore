@@ -1,0 +1,12 @@
+/composer.lock
+/.idea
+/.php_cs
+/.php_cs.cache
+/.phpunit.result.cache
+/nbproject/private/
+/config/
+/build
+/vendor/
+/examples/config.php
+
+
