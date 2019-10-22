@@ -1,0 +1,16 @@
+{
+    "name": "vgip/gip",
+    "description": "PHP Framework for developer",
+    "type": "library",
+    "keywords": ["framework"],
+    "license": "BSD-3-Clause",
+    "require": {
+        "php": ">=7.2",
+	"psr/log": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+	    "Gip\\": "src/Gip"
+        }
+    }
+}
