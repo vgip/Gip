@@ -3,8 +3,9 @@
 /.php_cs
 /.php_cs.cache
 /.phpunit.result.cache
-/nbproject/private/
+/nbproject/
 /config/
+/log/
 /build
 /vendor/
 /examples/config.php

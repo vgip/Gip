@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-	    "Gip\\": "src/Gip"
+	    "Vgip\\Gip\\": "src/Gip"
         }
     }
 }
