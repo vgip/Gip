@@ -12,26 +12,17 @@ use stdClass;
 
 trait TraitProperty
 {
-    public function setAll(object $storage)
+    public function setAll($storage, string $keyType = '')
     {
-        $arrayKeyConversion = new NamingConversion('LowerCamelCase', 'UpperCamelCase');
-        
-        if ($storage instanceof stdClass) {
-            $config = $storage;
-        } else if ($storage instanceof Storage) {
-            $config = $storage->getConfig();
-        } else {
-            throw new InvalidArgumentException('Argument 1 passed to setAll() must be an instance of available classes (stdClass or Storage)');
-        }
-        $properties = get_class_vars(static::class);
-        
-        $exception = [];
+        $config                     = $this->getConfigToSetterAndValidateStorageType($storage);
+        $arrayKeyConversionObject   = $this->getConfigKeyConversionObjectToSetterMethod($storage, $keyType);
+        $exception                  = [];
 
         foreach ($config as $property => $value) {
-            if (array_key_exists($property, $properties)) {
-                $funcName = $arrayKeyConversion->convert($property);
-                $setter = 'set'.ucfirst($funcName);
-                $this->$setter($value);
+            $propertySetterMethodName       = $arrayKeyConversionObject->convert($property);
+            $propertySetterMethodNameFull   = 'set'.$propertySetterMethodName;
+            if (method_exists($this, $propertySetterMethodNameFull)) {
+                $this->$propertySetterMethodNameFull($value);
             } else {
                 $exception[] = $property;
             }
@@ -62,5 +53,45 @@ trait TraitProperty
         }
         
         return $ret;
+    }
+    
+    private function getConfigToSetterAndValidateStorageType($storage)
+    {
+        $config = [];
+        if ($storage instanceof stdClass) {
+            $config = $storage;
+        } else if ($storage instanceof Storage) {
+            $config = $storage->getConfig();
+        } elseif (is_array($storage)) {
+            $config = $storage;
+        } else {
+            throw new InvalidArgumentException('Argument 1 passed to setAll() must be an instance of available classes (stdClass or Storage) or associative array (key => value)');
+        }
+        
+        return $config;
+    }
+    
+    private function getConfigKeyConversionObjectToSetterMethod($storage, $keyType)
+    {
+        $keyTypeDetected = 'LowerCamelCase';
+        
+        if ($storage instanceof stdClass) {
+            $keyTypeDetected = (empty($keyType)) ? 'LowerCamelCase' : $keyType;
+        } else if ($storage instanceof Storage) {
+            $keyTypeDetected = 'LowerCamelCase';
+        } elseif (is_array($storage)) {
+            $keyTypeDetected = (empty($keyType)) ? 'LowerSnakeCase' : $keyType;
+        } else {
+            throw new InvalidArgumentException('Argument 1 passed to setAll() must be an instance of available classes (stdClass or Storage) or associative array (key => value)');
+        }
+        
+        try {
+            $configKeyConversionObject = new NamingConversion($keyTypeDetected, 'UpperCamelCase');
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException('Property names conversion error. '.$e);
+        }
+        
+        
+        return $configKeyConversionObject;
     }
 }

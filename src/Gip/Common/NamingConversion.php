@@ -37,8 +37,12 @@ class NamingConversion
     {
         $conversionFunctionName = 'convert'.$this->typeFrom.'To'.$this->typeTo;
         
-        $convertedValue = Str::$conversionFunctionName($value);
-        
+        if ($this->typeFrom === $this->typeTo) {
+            $convertedValue = $value;
+        } else {
+            $convertedValue = Str::$conversionFunctionName($value);
+        }
+
         return $convertedValue;
     }
     
