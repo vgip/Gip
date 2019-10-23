@@ -11,7 +11,7 @@ use Vgip\Gip\Config\Storage\Storage;
 
 interface InterfaceConfig
 {
-    public function setAll(object $storage);
+    public function setAll($storage);
     public function getAll();
 }
 
