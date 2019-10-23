@@ -13,10 +13,10 @@ $pathConfig = join(DIRECTORY_SEPARATOR, [dirname(dirname(dirname(__DIR__))), 'co
 $config = require $pathConfig;
 
 $mysqlConfig = new MysqlConfig();
-$mysqlConfig->setAll($config, 'LowerCamelCasef');
+$mysqlConfig->setAll($config);
 
-print_r($config);
+$mysqlPlaceholder = new MysqlPlaceholder($mysqlConfig);
 
 $pageStorage->setHeadTitle('Mysql Placeholder test');
-$pageStorage->setBodyContent('Mysql Placeholder test!');
+$pageStorage->setBodyContent('<h1>Mysql Placeholder test</h1><div></div>');
 

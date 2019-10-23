@@ -70,10 +70,13 @@
  * 
  */
 
+//declare(strict_types = 1);
+
 namespace Vgip\Gip\Db\Mysql;
 
 use DateTime;
 use DateTimeZone;
+use \Vgip\Gip\Db\Mysql\Config;
 
 class MysqlPlaceholder
 {
@@ -103,8 +106,14 @@ class MysqlPlaceholder
     const RESULT_ASSOC = MYSQLI_ASSOC;
     const RESULT_NUM   = MYSQLI_NUM;
 
-    public function __construct($opt = array()) 
+    public function __construct($config) 
     {
+        if ($config instanceof Config) {
+            $opt = $config->getAll();
+        } else {
+            $opt = $config;
+        }
+        
         $opt = array_merge($this->defaults, $opt);
 
         $this->emode        = $opt['errmode'];
