@@ -844,7 +844,7 @@ class MysqlPlaceholder
         return $valueConverted;
     }
     
-    public function convertNull(null $value) : string
+    public function convertNull($value) : string
     {
         $valueConverted = 'NULL';
          
