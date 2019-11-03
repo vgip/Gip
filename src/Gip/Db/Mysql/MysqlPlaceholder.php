@@ -696,14 +696,16 @@ class MysqlPlaceholder
 		return $value;
 	}
 
-	protected function escapeString($value)
-	{
-		if ($value === NULL)
-		{
-			return 'NULL';
-		}
-		return	"'".mysqli_real_escape_string($this->conn,$value)."'";
-	}
+    public function escapeString($value)
+    {
+        if (null === $value) {
+            $res = 'NULL';
+        } else {
+            $res = "'".$this->conn->escape_string($value)."'";
+        }
+
+    return $res;
+    }
         
     protected function escapeBool(bool $value) : string
     {
