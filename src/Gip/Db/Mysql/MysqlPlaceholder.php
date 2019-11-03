@@ -837,21 +837,24 @@ class MysqlPlaceholder
     public function convertByValueType($value) : string
     {
         $typeName = gettype($value);
-        $methodName = 'convert'.ucfirst($typeName);
+        $methodName = 'convert'.ucfirst(mb_strtolower($typeName));
         
         $valueConverted = $this->$methodName($value);
         
         return $valueConverted;
     }
     
+    public function convertNull(null $value) : string
+    {
+        $valueConverted = 'NULL';
+         
+        return $valueConverted;
+    }
+    
     public function convertInteger(int $value) : string
     {
-        if (null === $value) {
-            $valueConverted = 'NULL';
-        } else {
-            $valueConverted = (string)$value;
-        }
-        
+        $valueConverted = (string)$value;
+         
         return $valueConverted;
     }
     
@@ -864,9 +867,7 @@ class MysqlPlaceholder
     
     public function convertBoolean(bool $value) : string
     {
-        if (null === $value) {
-            $valueConverted = 'NULL';
-        } else if (true === $value) {
+        if (true === $value) {
             $valueConverted = '\'1\'';
         } else {
             $valueConverted = '\'0\'';
