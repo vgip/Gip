@@ -832,4 +832,46 @@ class MysqlPlaceholder
 			unset($this->stats[$first]);
 		}
 	}
+    
+        
+    public function convertByValueType($value) : string
+    {
+        $typeName = gettype($value);
+        $methodName = 'convert'.ucfirst($typeName);
+        
+        $valueConverted = $this->$methodName($value);
+        
+        return $valueConverted;
+    }
+    
+    public function convertInteger(int $value) : string
+    {
+        if (null === $value) {
+            $valueConverted = 'NULL';
+        } else {
+            $valueConverted = (string)$value;
+        }
+        
+        return $valueConverted;
+    }
+    
+    public function convertString(string $value) : string
+    {
+        $valueConverted = $this->escapeString($value);
+        
+        return $valueConverted;
+    }
+    
+    public function convertBoolean(bool $value) : string
+    {
+        if (null === $value) {
+            $valueConverted = 'NULL';
+        } else if (true === $value) {
+            $valueConverted = '\'1\'';
+        } else {
+            $valueConverted = '\'0\'';
+        }
+        
+        return $valueConverted;
+    }
 }
