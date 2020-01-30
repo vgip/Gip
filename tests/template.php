@@ -1,24 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-use Vgip\Gip\Html\PageStorage;
+use Vgip\Gip\Common\Arr;
 
-$pageStorage = PageStorage::getInstance();
+$arr = new Arr();
 
-echo '<!doctype html>
+$testArr = [
+    'a_key' => 'a_val',
+    'b_key' => 'b_val',
+    'c_key' => 'c_val',
+];
 
-<html'.$pageStorage->getHtmlLang().'>
-<head>
-  '.$pageStorage->getHeadCharset().'
-
-  '.$pageStorage->getHeadTitle().'
-
-</head>
-
-<body>
-    '.$pageStorage->getBodyContent().'
-</body>
-
-</html>';
-
+$arrNew = $arr->updateArrayKeyByString($testArr, 'b_key', 'bb_key');
+print_r($arrNew);

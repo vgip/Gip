@@ -3,7 +3,7 @@
  * Operation with array
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Vgip\Gip\Common;
 
@@ -26,18 +26,6 @@ class Arr
         $this->prefix = $prefix;
     }
     
-    public function updateArrayKeyByArray(array $conformityKey, $new_key ) 
-    {
-
-    if( ! array_key_exists( $old_key, $array ) )
-        return $array;
-
-    $keys = array_keys( $array );
-    $keys[ array_search( $old_key, $keys ) ] = $new_key;
-
-    return array_combine( $keys, $array );
-    }
-
     public function getConformityArray(array $entity, string $variableNameConversionMethod)
     {
         if (!in_array($variableNameConversionMethod, $this->variableNameConversionMethodWhiteList, true)) {
@@ -88,5 +76,31 @@ class Arr
         }
         
         return $conformityArray;
+    }
+    
+    /**
+     * Updating (replacing) an array key without changing the order 
+     * of the keys and values and whithout foreach
+     * 
+     * https://stackoverflow.com/Questions/240660/in-PHP-how-do-you-change-the-key-of-an-array-element
+     * 
+     * @param array $array
+     * @param string $keyOld
+     * @param string $keyNew
+     * @return array
+     */
+    public function updateArrayKeyByString(array $array, string $keyOld, string $keyNew): array
+    {
+        if (!array_key_exists($keyOld, $array)) {
+            return $array;
+        }
+
+        $keys = array_keys($array);
+        $foundKey = array_search($keyOld, $keys);
+        $keys[$foundKey] = $keyNew;
+        
+        $res = array_combine($keys, $array);
+
+        return $res;
     }
 }
